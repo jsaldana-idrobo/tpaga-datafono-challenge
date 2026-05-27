@@ -8,6 +8,6 @@ module.exports = {
   testEnvironment: 'detox/runners/jest/testEnvironment',
   testRunner: 'jest-circus/runner',
   testTimeout: 120000,
-  testRegex: 'e2e/.*\\.e2e\\.ts$',
+  testRegex: String.raw`e2e/.*\.e2e\.ts$`,
   verbose: true,
 };

@@ -60,14 +60,14 @@ export function ResultScreen({
           )}
         </View>
 
-        {!isApproved ? (
+        {isApproved ? (
+          <PrimaryButton label="Nuevo cobro" onPress={handleRetry} />
+        ) : (
           <PrimaryButton
             label="Reintentar"
             onPress={handleRetry}
             testID="retry-button"
           />
-        ) : (
-          <PrimaryButton label="Nuevo cobro" onPress={handleRetry} />
         )}
       </View>
     </ScreenShell>

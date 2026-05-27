@@ -48,7 +48,7 @@ jest.mock('react-native-screens', () => ({
 }));
 
 jest.mock('react-native-safe-area-context', () => {
-  const ReactActual = jest.requireActual('react') as typeof import('react');
+  const ReactActual = jest.requireActual<typeof import('react')>('react');
   const inset = {bottom: 0, left: 0, right: 0, top: 0};
   const frame = {height: 800, width: 400, x: 0, y: 0};
   return {

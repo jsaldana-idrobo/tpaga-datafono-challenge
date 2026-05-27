@@ -8,10 +8,10 @@ import {
 } from '../../domain/paymentTypes';
 import {styles} from './MethodSelector.styles';
 
-type MethodSelectorProps = {
+type MethodSelectorProps = Readonly<{
   onChange: (method: PaymentMethod) => void;
   selectedMethod: PaymentMethod;
-};
+}>;
 
 export function MethodSelector({
   onChange,

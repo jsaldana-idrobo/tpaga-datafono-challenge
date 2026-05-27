@@ -3,12 +3,12 @@ import {Pressable, Text} from 'react-native';
 
 import {styles} from './PrimaryButton.styles';
 
-type PrimaryButtonProps = {
+type PrimaryButtonProps = Readonly<{
   disabled?: boolean;
   label: string;
   onPress: () => void;
   testID?: string;
-};
+}>;
 
 export function PrimaryButton({
   disabled = false,

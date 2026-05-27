@@ -4,10 +4,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {styles} from './ScreenShell.styles';
 
-type ScreenShellProps = {
+type ScreenShellProps = Readonly<{
   children: React.ReactNode;
   centered?: boolean;
-};
+}>;
 
 export function ScreenShell({
   centered = false,
