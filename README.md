@@ -1,79 +1,69 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Tpaga Datafono Challenge
 
-# Getting Started
+Mini app React Native para simular un datáfono digital con integración nativa Android en Kotlin.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Requisitos
 
-## Step 1: Start the Metro Server
+- Node.js 18+
+- npm 10+
+- JDK 17 recomendado para Gradle
+- Android SDK con `platforms;android-35`, `build-tools;35.0.0` y un emulador Android
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
+Si tienes varias versiones de Java/Android SDK:
 
 ```bash
-# using npm
+export JAVA_HOME=/opt/homebrew/opt/openjdk@17
+export ANDROID_HOME=/opt/homebrew/share/android-commandlinetools
+export PATH="$ANDROID_HOME/platform-tools:$PATH"
+```
+
+## Instalacion Y Ejecucion
+
+```bash
+npm install
 npm start
-
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### For iOS
+## Validacion
 
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+npm run typecheck
+npm run lint
+npm test -- --coverage
+npm run android:test
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+E2E Android con Detox:
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+```bash
+npm run e2e:build:android
+npm run e2e:android
+```
 
-## Step 3: Modifying your App
+La configuracion Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene otro nombre, cambia `avdName` en `.detoxrc.js`.
 
-Now that you have successfully run the app, let's modify it.
+## Decisiones Tecnicas
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+- React Native bare + TypeScript estricto para poder integrar un Native Module real en `/android`.
+- React Navigation para mantener el flujo de 3 pantallas desacoplado y tipado.
+- Dominio separado para formato COP, validacion de montos, tipos de pago y normalizacion de errores.
+- `PaymentReaderModule` expone `readPayment(amount, method)` como Promise hacia JS.
+- `QR` y `NFC` aprueban despues de 1.5s con `status`, `transactionId` y `amount`.
+- `CARD` esta en la UI porque lo pide el challenge, pero el lector nativo lo rechaza con error controlado para demostrar el flujo de error/reintento.
+- Se previenen dobles toques con un hook `useSingleFlight` y se evita actualizar navegacion si la pantalla de procesamiento se desmonta.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+## Testing
 
-## Congratulations! :tada:
+- Unit tests de dominio: formato COP, validaciones y errores.
+- Unit tests del gateway nativo JS con mock de `NativeModules`.
+- Flow tests del flujo completo: QR exitoso, tarjeta con error/retry y doble tap.
+- Unit tests Android/Kotlin para reglas del lector nativo.
+- Specs E2E Detox para QR, NFC y Tarjeta.
 
-You've successfully run and modified your React Native App. :partying_face:
+## Que Haria Con Mas Tiempo
 
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- Agregar un contrato TurboModule/New Architecture para tipar el puente nativo end to end.
+- Persistir transacciones localmente y agregar historial.
+- Medir tiempos reales del flujo con trazas y logs estructurados.
+- Configurar CI con jobs separados para lint, typecheck, Jest, Gradle y Detox.
