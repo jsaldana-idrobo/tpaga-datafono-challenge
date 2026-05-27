@@ -1,5 +1,6 @@
 module.exports = {
   maxWorkers: 1,
+  preset: 'react-native',
   testEnvironment: './environment',
   testRunner: 'jest-circus/runner',
   testTimeout: 120000,
