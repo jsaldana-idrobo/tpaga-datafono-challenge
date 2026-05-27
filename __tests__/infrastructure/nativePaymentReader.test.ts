@@ -78,6 +78,9 @@ describe('native payment reader gateway', () => {
 
     jest.advanceTimersByTime(1000);
 
-    await expect(payment).rejects.toEqual({code: 'PAYMENT_READER_TIMEOUT'});
+    await expect(payment).rejects.toMatchObject({
+      code: 'PAYMENT_READER_TIMEOUT',
+    });
+    await expect(payment).rejects.toBeInstanceOf(Error);
   });
 });

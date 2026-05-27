@@ -7,6 +7,7 @@ import type {
 } from '../domain/paymentTypes';
 
 const PAYMENT_READER_TIMEOUT_MS = 10000;
+const PAYMENT_READER_TIMEOUT_CODE = 'PAYMENT_READER_TIMEOUT';
 
 type NativePaymentResponse = {
   amount: number;
@@ -22,9 +23,10 @@ type ReadPaymentOptions = Readonly<{
   timeoutMs?: number;
 }>;
 
-const PAYMENT_READER_TIMEOUT_ERROR: PaymentErrorInfo = {
-  code: 'PAYMENT_READER_TIMEOUT',
-};
+const createPaymentReaderTimeoutError = (): Error & PaymentErrorInfo =>
+  Object.assign(new Error('Payment reader timed out.'), {
+    code: PAYMENT_READER_TIMEOUT_CODE,
+  });
 
 const getPaymentReaderModule = (): NativePaymentReaderModule => {
   const paymentReaderModule = NativeModules.PaymentReaderModule as
@@ -71,7 +73,7 @@ const withPaymentTimeout = <T>(
 ): Promise<T> =>
   new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
-      reject(PAYMENT_READER_TIMEOUT_ERROR);
+      reject(createPaymentReaderTimeoutError());
     }, timeoutMs);
 
     promise.then(resolve, reject).finally(() => {
