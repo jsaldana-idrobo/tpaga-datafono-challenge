@@ -1,10 +1,13 @@
 module.exports = {
+  globalSetup: 'detox/runners/jest/globalSetup',
+  globalTeardown: 'detox/runners/jest/globalTeardown',
   maxWorkers: 1,
   preset: 'react-native',
-  testEnvironment: './environment',
+  reporters: ['detox/runners/jest/reporter'],
+  rootDir: '..',
+  testEnvironment: 'detox/runners/jest/testEnvironment',
   testRunner: 'jest-circus/runner',
   testTimeout: 120000,
-  testRegex: '\\.e2e\\.ts$',
-  reporters: ['detox/runners/jest/reporter'],
+  testRegex: 'e2e/.*\\.e2e\\.ts$',
   verbose: true,
 };

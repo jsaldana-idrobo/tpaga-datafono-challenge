@@ -7,6 +7,9 @@ const submitPayment = async (
   amount: string,
   methodTestID: string,
 ): Promise<void> => {
+  await waitFor(element(by.id(AMOUNT_INPUT_TEST_ID)))
+    .toBeVisible()
+    .withTimeout(10000);
   await element(by.id(AMOUNT_INPUT_TEST_ID)).tap();
   await element(by.id(AMOUNT_INPUT_TEST_ID)).typeText(amount);
   await device.pressBack();
@@ -16,7 +19,7 @@ const submitPayment = async (
 
 describe('payment flow', () => {
   beforeEach(async () => {
-    await device.reloadReactNative();
+    await device.launchApp({delete: true, newInstance: true});
   });
 
   it('approves QR payments end to end', async () => {
@@ -46,6 +49,6 @@ describe('payment flow', () => {
       .withTimeout(4000);
 
     await element(by.id('retry-button')).tap();
-    await expect(element(by.text('Nuevo cobro'))).toBeVisible();
+    await expect(element(by.id(AMOUNT_INPUT_TEST_ID))).toBeVisible();
   });
 });

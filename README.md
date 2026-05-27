@@ -30,6 +30,7 @@ npm run android
 ```bash
 npm run typecheck
 npm run lint
+npm audit --audit-level=moderate
 npm test -- --coverage
 npm run android:test
 ```
