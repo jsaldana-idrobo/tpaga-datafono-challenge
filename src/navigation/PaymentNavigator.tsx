@@ -6,7 +6,7 @@ import {enableScreens} from 'react-native-screens';
 import {AmountScreen} from '../presentation/screens/AmountScreen';
 import {ProcessingScreen} from '../presentation/screens/ProcessingScreen';
 import {ResultScreen} from '../presentation/screens/ResultScreen';
-import {colors} from '../presentation/theme';
+import {navigationColors, navigationStyles} from './PaymentNavigator.styles';
 import type {RootStackParamList} from './navigationTypes';
 
 enableScreens();
@@ -20,11 +20,11 @@ export function PaymentNavigator(): React.JSX.Element {
         initialRouteName="Amount"
         screenOptions={{
           animation: 'slide_from_right',
-          contentStyle: {backgroundColor: colors.background},
+          contentStyle: navigationStyles.content,
           headerShadowVisible: false,
-          headerStyle: {backgroundColor: colors.background},
+          headerStyle: navigationStyles.header,
           headerTitleAlign: 'left',
-          headerTintColor: colors.ink,
+          headerTintColor: navigationColors.headerTint,
         }}>
         <Stack.Screen
           component={AmountScreen}

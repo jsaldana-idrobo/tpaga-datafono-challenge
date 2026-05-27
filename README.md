@@ -5,7 +5,7 @@ Mini app React Native para simular un datáfono digital con integración nativa 
 ## Requisitos
 
 - Node.js 18+
-- npm 10+
+- pnpm 10+
 - JDK 17 recomendado para Gradle
 - Android SDK con `platforms;android-35`, `build-tools;35.0.0` y un emulador Android
 
@@ -20,26 +20,27 @@ export PATH="$ANDROID_HOME/platform-tools:$PATH"
 ## Instalacion Y Ejecucion
 
 ```bash
-npm install
-npm start
-npm run android
+corepack enable
+pnpm install --frozen-lockfile
+pnpm start
+pnpm android
 ```
 
 ## Validacion
 
 ```bash
-npm run typecheck
-npm run lint
-npm audit --audit-level=moderate
-npm test -- --coverage
-npm run android:test
+pnpm typecheck
+pnpm lint
+pnpm audit --audit-level moderate
+pnpm test:coverage
+pnpm android:test
 ```
 
 E2E Android con Detox:
 
 ```bash
-npm run e2e:build:android
-npm run e2e:android
+pnpm e2e:build:android
+pnpm e2e:android
 ```
 
 La configuracion Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene otro nombre, cambia `avdName` en `.detoxrc.js`.

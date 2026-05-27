@@ -1,7 +1,7 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, Text} from 'react-native';
 
-import {colors, radii, spacing} from '../theme';
+import {styles} from './PrimaryButton.styles';
 
 type PrimaryButtonProps = {
   disabled?: boolean;
@@ -32,25 +32,3 @@ export function PrimaryButton({
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    backgroundColor: colors.accent,
-    borderRadius: radii.md,
-    minHeight: 54,
-    justifyContent: 'center',
-    paddingHorizontal: spacing.md,
-  },
-  buttonDisabled: {
-    backgroundColor: colors.border,
-  },
-  buttonPressed: {
-    backgroundColor: colors.accentPressed,
-  },
-  label: {
-    color: colors.panel,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-});

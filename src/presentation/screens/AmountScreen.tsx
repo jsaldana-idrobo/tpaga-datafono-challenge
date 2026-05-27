@@ -4,7 +4,6 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -17,8 +16,8 @@ import type {RootStackParamList} from '../../navigation/navigationTypes';
 import {MethodSelector} from '../components/MethodSelector';
 import {PrimaryButton} from '../components/PrimaryButton';
 import {ScreenShell} from '../components/ScreenShell';
-import {colors, radii, spacing} from '../theme';
 import {useSingleFlight} from '../hooks/useSingleFlight';
+import {styles, textInputColors} from './AmountScreen.styles';
 
 type AmountScreenProps = NativeStackScreenProps<RootStackParamList, 'Amount'>;
 
@@ -78,7 +77,7 @@ export function AmountScreen({
               keyboardType="number-pad"
               onChangeText={handleAmountChange}
               placeholder="$ 0"
-              placeholderTextColor={colors.muted}
+              placeholderTextColor={textInputColors.placeholder}
               style={styles.amountInput}
               testID="amount-input"
               value={amountInput}
@@ -107,57 +106,3 @@ export function AmountScreen({
     </ScreenShell>
   );
 }
-
-const styles = StyleSheet.create({
-  amountInput: {
-    backgroundColor: colors.panel,
-    borderColor: colors.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    color: colors.ink,
-    fontSize: 32,
-    fontWeight: '800',
-    minHeight: 70,
-    paddingHorizontal: spacing.md,
-  },
-  eyebrow: {
-    color: colors.accent,
-    fontSize: 13,
-    fontWeight: '800',
-    letterSpacing: 0,
-    textTransform: 'uppercase',
-  },
-  fieldGroup: {
-    gap: spacing.xs,
-  },
-  form: {
-    gap: spacing.lg,
-  },
-  keyboardAvoidingView: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  label: {
-    color: colors.ink,
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  subtitle: {
-    color: colors.muted,
-    fontSize: 16,
-    lineHeight: 23,
-    marginTop: spacing.sm,
-  },
-  title: {
-    color: colors.ink,
-    fontSize: 34,
-    fontWeight: '900',
-    letterSpacing: 0,
-    marginTop: spacing.xs,
-  },
-  validationMessage: {
-    color: colors.danger,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-});
