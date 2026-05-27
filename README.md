@@ -88,7 +88,7 @@ La configuración Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene 
 
 ## Próximas mejoras
 
-- Agregar contrato TurboModule/New Architecture para tipar el puente nativo end to end.
+- Con más tiempo, migrar el Native Module actual de bridge clásico a TurboModule/Codegen para tener contrato tipado end to end con la New Architecture.
 - Persistir transacciones localmente y agregar historial con filtros por método, estado y fecha.
 - Enviar trazas y errores a Sentry/Crashlytics sin PII para mejorar observabilidad real.
 - Firmar builds release con secrets y agregar distribución interna automatizada.
