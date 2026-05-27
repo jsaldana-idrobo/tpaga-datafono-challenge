@@ -19,7 +19,9 @@ import {ScreenShell} from '../components/ScreenShell';
 import {useSingleFlight} from '../hooks/useSingleFlight';
 import {styles, textInputColors} from './AmountScreen.styles';
 
-type AmountScreenProps = NativeStackScreenProps<RootStackParamList, 'Amount'>;
+type AmountScreenProps = Readonly<
+  NativeStackScreenProps<RootStackParamList, 'Amount'>
+>;
 
 export function AmountScreen({
   navigation,

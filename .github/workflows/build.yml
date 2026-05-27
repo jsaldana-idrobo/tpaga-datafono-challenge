@@ -32,6 +32,13 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      - name: Setup Java
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -43,6 +50,9 @@ jobs:
 
       - name: Test with coverage
         run: pnpm test:coverage --runInBand --ci
+
+      - name: Android unit tests
+        run: pnpm android:test
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0

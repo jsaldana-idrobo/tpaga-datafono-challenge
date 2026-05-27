@@ -1,6 +1,7 @@
 /// <reference types="detox" />
 
 const AMOUNT_INPUT_TEST_ID = 'amount-input';
+const APPROVED_PAYMENT_TEXT = 'Cobro aprobado';
 const SUBMIT_PAYMENT_BUTTON_TEST_ID = 'submit-payment-button';
 
 const submitPayment = async (
@@ -26,7 +27,7 @@ describe('payment flow', () => {
     await submitPayment('25000', 'method-QR');
 
     await expect(element(by.text('Procesando cobro'))).toBeVisible();
-    await waitFor(element(by.text('Cobro aprobado')))
+    await waitFor(element(by.text(APPROVED_PAYMENT_TEXT)))
       .toBeVisible()
       .withTimeout(4000);
   });
@@ -34,9 +35,10 @@ describe('payment flow', () => {
   it('approves NFC payments end to end', async () => {
     await submitPayment('41000', 'method-NFC');
 
-    await waitFor(element(by.text('Cobro aprobado')))
+    await waitFor(element(by.text(APPROVED_PAYMENT_TEXT)))
       .toBeVisible()
       .withTimeout(4000);
+    await expect(element(by.text(APPROVED_PAYMENT_TEXT))).toBeVisible();
   });
 
   it('shows a retryable error for card payments', async () => {

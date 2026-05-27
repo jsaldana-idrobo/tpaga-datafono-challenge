@@ -30,4 +30,10 @@ describe('payment error normalization', () => {
       'No pudimos procesar el cobro. Intenta nuevamente.',
     );
   });
+
+  it('maps payment reader timeouts to retryable customer-safe copy', () => {
+    expect(normalizePaymentError({code: 'PAYMENT_READER_TIMEOUT'})).toBe(
+      'El lector tardó demasiado en responder. Intenta nuevamente.',
+    );
+  });
 });

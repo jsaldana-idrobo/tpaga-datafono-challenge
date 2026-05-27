@@ -4,6 +4,8 @@ import {Pressable, Text, View} from 'react-native';
 
 import {useSingleFlight} from '../../src/presentation/hooks/useSingleFlight';
 
+const RUN_SUCCESSFUL_TASK_TEST_ID = 'run-successful-task';
+
 type SingleFlightHarnessProps = Readonly<{
   onError: () => void;
   onSuccess: () => void;
@@ -35,7 +37,7 @@ function SingleFlightHarness({
       </Pressable>
       <Pressable
         onPress={() => singleFlight.runOnce(onSuccess)}
-        testID="run-successful-task">
+        testID={RUN_SUCCESSFUL_TASK_TEST_ID}>
         <Text>Run successful task</Text>
       </Pressable>
     </View>
@@ -51,9 +53,23 @@ describe('useSingleFlight', () => {
     );
 
     fireEvent.press(screen.getByTestId('run-failing-task'));
-    fireEvent.press(screen.getByTestId('run-successful-task'));
+    fireEvent.press(screen.getByTestId(RUN_SUCCESSFUL_TASK_TEST_ID));
 
     expect(onError).toHaveBeenCalledTimes(1);
+    expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('lock-state')).toHaveTextContent('locked');
+  });
+
+  it('ignores subsequent tasks while locked', () => {
+    const onError = jest.fn();
+    const onSuccess = jest.fn();
+    const screen = render(
+      <SingleFlightHarness onError={onError} onSuccess={onSuccess} />,
+    );
+
+    fireEvent.press(screen.getByTestId(RUN_SUCCESSFUL_TASK_TEST_ID));
+    fireEvent.press(screen.getByTestId(RUN_SUCCESSFUL_TASK_TEST_ID));
+
     expect(onSuccess).toHaveBeenCalledTimes(1);
     expect(screen.getByTestId('lock-state')).toHaveTextContent('locked');
   });

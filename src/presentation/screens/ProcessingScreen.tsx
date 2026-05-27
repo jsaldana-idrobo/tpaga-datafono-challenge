@@ -14,10 +14,12 @@ type ProcessingScreenProps = NativeStackScreenProps<
   'Processing'
 >;
 
+type ReadonlyProcessingScreenProps = Readonly<ProcessingScreenProps>;
+
 export function ProcessingScreen({
   navigation,
   route,
-}: ProcessingScreenProps): React.JSX.Element {
+}: ReadonlyProcessingScreenProps): React.JSX.Element {
   const {amount, method} = route.params;
 
   useEffect(() => {

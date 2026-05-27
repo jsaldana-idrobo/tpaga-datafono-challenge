@@ -1,6 +1,12 @@
 import {NativeModules} from 'react-native';
 
-import type {PaymentMethod, PaymentReceipt} from '../domain/paymentTypes';
+import type {
+  PaymentErrorInfo,
+  PaymentMethod,
+  PaymentReceipt,
+} from '../domain/paymentTypes';
+
+const PAYMENT_READER_TIMEOUT_MS = 10000;
 
 type NativePaymentResponse = {
   amount: number;
@@ -10,6 +16,14 @@ type NativePaymentResponse = {
 
 type NativePaymentReaderModule = {
   readPayment: (amount: number, method: PaymentMethod) => Promise<unknown>;
+};
+
+type ReadPaymentOptions = Readonly<{
+  timeoutMs?: number;
+}>;
+
+const PAYMENT_READER_TIMEOUT_ERROR: PaymentErrorInfo = {
+  code: 'PAYMENT_READER_TIMEOUT',
 };
 
 const getPaymentReaderModule = (): NativePaymentReaderModule => {
@@ -51,14 +65,27 @@ const toPaymentReceipt = (nativeResponse: unknown): PaymentReceipt => {
   };
 };
 
+const withPaymentTimeout = <T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+): Promise<T> =>
+  new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(PAYMENT_READER_TIMEOUT_ERROR);
+    }, timeoutMs);
+
+    promise.then(resolve, reject).finally(() => {
+      clearTimeout(timeoutId);
+    });
+  });
+
 export const readPayment = async (
   amount: number,
   method: PaymentMethod,
+  options: ReadPaymentOptions = {},
 ): Promise<PaymentReceipt> => {
-  const nativeResponse = await getPaymentReaderModule().readPayment(
-    amount,
-    method,
+  return withPaymentTimeout(
+    getPaymentReaderModule().readPayment(amount, method).then(toPaymentReceipt),
+    options.timeoutMs ?? PAYMENT_READER_TIMEOUT_MS,
   );
-
-  return toPaymentReceipt(nativeResponse);
 };

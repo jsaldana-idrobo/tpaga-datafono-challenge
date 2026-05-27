@@ -28,6 +28,17 @@ describe('payment flow', () => {
     expect(screen.getByTestId(SUBMIT_PAYMENT_BUTTON_TEST_ID)).toBeEnabled();
   });
 
+  it('shows validation feedback when the amount exceeds the transaction limit', () => {
+    const screen = render(<App />);
+
+    fireEvent.changeText(screen.getByTestId(AMOUNT_INPUT_TEST_ID), '10000001');
+
+    expect(
+      screen.getByText('El monto máximo por cobro es $ 10.000.000.'),
+    ).toBeOnTheScreen();
+    expect(screen.getByTestId(SUBMIT_PAYMENT_BUTTON_TEST_ID)).toBeDisabled();
+  });
+
   it('processes an approved QR payment through the native module', async () => {
     paymentReaderModule.readPayment.mockResolvedValue({
       amount: 25000,

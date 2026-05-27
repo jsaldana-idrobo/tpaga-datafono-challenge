@@ -13,6 +13,10 @@ const paymentReaderModule = NativeModules.PaymentReaderModule as {
 };
 
 describe('native payment reader gateway', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   beforeEach(() => {
     paymentReaderModule.readPayment = jest.fn();
   });
@@ -62,5 +66,18 @@ describe('native payment reader gateway', () => {
     await expect(readPayment(70000, 'NFC')).rejects.toThrow(
       INVALID_READER_RESPONSE_ERROR,
     );
+  });
+
+  it('rejects when the native reader exceeds the timeout', async () => {
+    jest.useFakeTimers();
+    paymentReaderModule.readPayment.mockReturnValue(
+      new Promise(() => undefined),
+    );
+
+    const payment = readPayment(70000, 'QR', {timeoutMs: 1000});
+
+    jest.advanceTimersByTime(1000);
+
+    await expect(payment).rejects.toEqual({code: 'PAYMENT_READER_TIMEOUT'});
   });
 });

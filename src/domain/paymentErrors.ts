@@ -30,6 +30,10 @@ const toPaymentErrorInfo = (error: unknown): PaymentErrorInfo => {
 export const normalizePaymentError = (error: unknown): string => {
   const paymentError = toPaymentErrorInfo(error);
 
+  if (paymentError.code === 'PAYMENT_READER_TIMEOUT') {
+    return 'El lector tardó demasiado en responder. Intenta nuevamente.';
+  }
+
   if (paymentError.code === 'PAYMENT_METHOD_UNSUPPORTED') {
     return 'El método seleccionado aún no está disponible.';
   }

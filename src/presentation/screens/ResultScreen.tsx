@@ -9,7 +9,9 @@ import {PrimaryButton} from '../components/PrimaryButton';
 import {ScreenShell} from '../components/ScreenShell';
 import {styles} from './ResultScreen.styles';
 
-type ResultScreenProps = NativeStackScreenProps<RootStackParamList, 'Result'>;
+type ResultScreenProps = Readonly<
+  NativeStackScreenProps<RootStackParamList, 'Result'>
+>;
 
 export function ResultScreen({
   navigation,
