@@ -9,10 +9,7 @@ type NativePaymentResponse = {
 };
 
 type NativePaymentReaderModule = {
-  readPayment: (
-    amount: number,
-    method: PaymentMethod,
-  ) => Promise<NativePaymentResponse>;
+  readPayment: (amount: number, method: PaymentMethod) => Promise<unknown>;
 };
 
 const getPaymentReaderModule = (): NativePaymentReaderModule => {
@@ -27,22 +24,30 @@ const getPaymentReaderModule = (): NativePaymentReaderModule => {
   return paymentReaderModule;
 };
 
-const toPaymentReceipt = (
-  nativeResponse: NativePaymentResponse,
-): PaymentReceipt => {
-  const hasValidReceipt =
-    nativeResponse.status === 'approved' &&
-    nativeResponse.transactionId.trim().length > 0 &&
-    Number.isFinite(nativeResponse.amount);
+const toPaymentReceipt = (nativeResponse: unknown): PaymentReceipt => {
+  if (typeof nativeResponse !== 'object' || nativeResponse === null) {
+    throw new Error('Respuesta inválida del lector de pagos.');
+  }
 
-  if (!hasValidReceipt) {
+  const response = nativeResponse as Partial<NativePaymentResponse>;
+  const {amount, status, transactionId} = response;
+
+  if (
+    status !== 'approved' ||
+    typeof transactionId !== 'string' ||
+    transactionId.trim().length === 0 ||
+    typeof amount !== 'number' ||
+    !Number.isFinite(amount) ||
+    !Number.isInteger(amount) ||
+    amount <= 0
+  ) {
     throw new Error('Respuesta inválida del lector de pagos.');
   }
 
   return {
-    amount: nativeResponse.amount,
+    amount,
     status: 'approved',
-    transactionId: nativeResponse.transactionId,
+    transactionId,
   };
 };
 

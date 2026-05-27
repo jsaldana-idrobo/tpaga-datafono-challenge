@@ -4,7 +4,6 @@ import {ActivityIndicator, Text, View} from 'react-native';
 
 import {formatCOP} from '../../domain/currency';
 import {normalizePaymentError} from '../../domain/paymentErrors';
-import type {PaymentErrorInfo} from '../../domain/paymentTypes';
 import {readPayment} from '../../infrastructure/nativePaymentReader';
 import type {RootStackParamList} from '../../navigation/navigationTypes';
 import {ScreenShell} from '../components/ScreenShell';
@@ -37,7 +36,7 @@ export function ProcessingScreen({
           transactionId: receipt.transactionId,
         });
       })
-      .catch((error: PaymentErrorInfo) => {
+      .catch((error: unknown) => {
         if (!isActive) {
           return;
         }

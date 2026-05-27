@@ -2,6 +2,10 @@ import {NativeModules} from 'react-native';
 
 import {readPayment} from '../../src/infrastructure/nativePaymentReader';
 
+const APPROVED_STATUS = 'approved';
+const INVALID_READER_RESPONSE_ERROR = 'Respuesta inválida del lector de pagos.';
+const TRANSACTION_ID = 'TXN-ABC123';
+
 const paymentReaderModule = NativeModules.PaymentReaderModule as {
   readPayment: jest.Mock<
     Promise<{status: string; transactionId: string; amount: number}>
@@ -15,14 +19,14 @@ describe('native payment reader gateway', () => {
 
   it('delegates approved QR payments to the Android native module', async () => {
     paymentReaderModule.readPayment.mockResolvedValue({
-      status: 'approved',
-      transactionId: 'TXN-ABC123',
+      status: APPROVED_STATUS,
+      transactionId: TRANSACTION_ID,
       amount: 70000,
     });
 
     await expect(readPayment(70000, 'QR')).resolves.toEqual({
-      status: 'approved',
-      transactionId: 'TXN-ABC123',
+      status: APPROVED_STATUS,
+      transactionId: TRANSACTION_ID,
       amount: 70000,
     });
     expect(paymentReaderModule.readPayment).toHaveBeenCalledWith(70000, 'QR');
@@ -30,13 +34,33 @@ describe('native payment reader gateway', () => {
 
   it('rejects malformed native responses before they reach the UI', async () => {
     paymentReaderModule.readPayment.mockResolvedValue({
-      status: 'approved',
+      status: APPROVED_STATUS,
       transactionId: '',
       amount: 70000,
     });
 
     await expect(readPayment(70000, 'NFC')).rejects.toThrow(
-      'Respuesta inválida del lector de pagos.',
+      INVALID_READER_RESPONSE_ERROR,
+    );
+  });
+
+  it('rejects non-object native responses before they reach the UI', async () => {
+    paymentReaderModule.readPayment.mockResolvedValue(null as never);
+
+    await expect(readPayment(70000, 'NFC')).rejects.toThrow(
+      INVALID_READER_RESPONSE_ERROR,
+    );
+  });
+
+  it('rejects invalid approved amounts from native responses', async () => {
+    paymentReaderModule.readPayment.mockResolvedValue({
+      status: APPROVED_STATUS,
+      transactionId: TRANSACTION_ID,
+      amount: -1,
+    });
+
+    await expect(readPayment(70000, 'NFC')).rejects.toThrow(
+      INVALID_READER_RESPONSE_ERROR,
     );
   });
 });

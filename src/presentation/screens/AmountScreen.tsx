@@ -1,6 +1,6 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useFocusEffect} from '@react-navigation/native';
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -26,15 +26,15 @@ export function AmountScreen({
 }: AmountScreenProps): React.JSX.Element {
   const [amountInput, setAmountInput] = useState('');
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('QR');
-  const submission = useSingleFlight();
-  const amount = useMemo(() => parseCOPInput(amountInput), [amountInput]);
-  const validation = useMemo(() => validatePaymentAmount(amount), [amount]);
-  const isSubmitDisabled = !validation.isValid || submission.isLocked;
+  const {isLocked, reset, runOnce} = useSingleFlight();
+  const amount = parseCOPInput(amountInput);
+  const validation = validatePaymentAmount(amount);
+  const isSubmitDisabled = !validation.isValid || isLocked;
 
   useFocusEffect(
     useCallback(() => {
-      submission.reset();
-    }, [submission]),
+      reset();
+    }, [reset]),
   );
 
   const handleAmountChange = (value: string) => {
@@ -47,7 +47,7 @@ export function AmountScreen({
       return;
     }
 
-    submission.runOnce(() => {
+    runOnce(() => {
       navigation.navigate('Processing', {
         amount,
         method: selectedMethod,

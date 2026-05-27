@@ -24,4 +24,10 @@ describe('payment error normalization', () => {
       'No pudimos procesar el cobro. Intenta nuevamente.',
     );
   });
+
+  it('falls back safely for non-standard thrown values', () => {
+    expect(normalizePaymentError(null)).toBe(
+      'No pudimos procesar el cobro. Intenta nuevamente.',
+    );
+  });
 });

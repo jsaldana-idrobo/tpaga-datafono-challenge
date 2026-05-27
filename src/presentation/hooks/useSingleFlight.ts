@@ -1,4 +1,4 @@
-import {useCallback, useRef, useState} from 'react';
+import {useCallback, useMemo, useRef, useState} from 'react';
 
 export const useSingleFlight = () => {
   const isLockedRef = useRef(false);
@@ -9,17 +9,29 @@ export const useSingleFlight = () => {
     setIsLocked(false);
   }, []);
 
-  const runOnce = useCallback((task: () => void): boolean => {
-    if (isLockedRef.current) {
-      return false;
-    }
+  const runOnce = useCallback(
+    (task: () => void): boolean => {
+      if (isLockedRef.current) {
+        return false;
+      }
 
-    isLockedRef.current = true;
-    setIsLocked(true);
-    task();
+      isLockedRef.current = true;
+      setIsLocked(true);
 
-    return true;
-  }, []);
+      try {
+        task();
+      } catch (error) {
+        reset();
+        throw error;
+      }
 
-  return {isLocked, reset, runOnce};
+      return true;
+    },
+    [reset],
+  );
+
+  return useMemo(
+    () => ({isLocked, reset, runOnce}),
+    [isLocked, reset, runOnce],
+  );
 };

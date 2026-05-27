@@ -1,6 +1,6 @@
 import {formatCOP} from './currency';
 
-export const MAX_PAYMENT_AMOUNT_COP = 10000000;
+const MAX_PAYMENT_AMOUNT_COP = 10000000;
 
 type ValidPaymentAmount = {
   isValid: true;

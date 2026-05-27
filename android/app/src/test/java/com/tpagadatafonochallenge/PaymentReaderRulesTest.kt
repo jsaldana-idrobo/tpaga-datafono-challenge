@@ -20,6 +20,22 @@ class PaymentReaderRulesTest {
   }
 
   @Test
+  fun rejectsDecimalAmounts() {
+    val error = PaymentReaderRules.validate(1000.50, "QR")
+
+    assertEquals("PAYMENT_AMOUNT_INVALID", error?.code)
+    assertEquals("El monto debe ser un entero positivo.", error?.message)
+  }
+
+  @Test
+  fun rejectsAmountsAboveTheTransactionLimit() {
+    val error = PaymentReaderRules.validate(10000001.0, "QR")
+
+    assertEquals("PAYMENT_AMOUNT_INVALID", error?.code)
+    assertEquals("El monto máximo por cobro es $ 10.000.000.", error?.message)
+  }
+
+  @Test
   fun rejectsUnsupportedCardMethod() {
     val error = PaymentReaderRules.validate(50000.0, "CARD")
 
