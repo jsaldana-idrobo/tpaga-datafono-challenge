@@ -48,9 +48,10 @@ La configuración Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene 
 ## Decisiones técnicas
 
 - React Native bare + TypeScript estricto para poder integrar un Native Module real en `/android`.
+- TurboModule/Codegen para declarar el contrato nativo en TypeScript y generar la especificación Android.
 - React Navigation para mantener el flujo de 3 pantallas desacoplado y tipado.
 - Dominio separado para formato COP, validación de montos, tipos de pago y normalización de errores.
-- `PaymentReaderModule` expone `readPayment(amount, method)` como Promise hacia JS.
+- `PaymentReaderModule` expone `readPayment(amount, method)` como Promise hacia JS mediante TurboModule.
 - `QR` y `NFC` aprueban después de 1.5s con `status`, `transactionId` y `amount`.
 - `CARD` está en la UI porque lo pide el challenge, pero el lector nativo lo rechaza con error controlado para demostrar el flujo de error/reintento.
 - Se previenen dobles toques con un hook `useSingleFlight` y se evita actualizar navegación si la pantalla de procesamiento se desmonta.
@@ -88,7 +89,7 @@ La configuración Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene 
 
 ## Próximas mejoras
 
-- Con más tiempo, migrar el Native Module actual de bridge clásico a TurboModule/Codegen para tener contrato tipado end to end con la New Architecture.
+- Agregar la implementación iOS equivalente del `PaymentReaderModule`.
 - Persistir transacciones localmente y agregar historial con filtros por método, estado y fecha.
 - Enviar trazas y errores a Sentry/Crashlytics sin PII para mejorar observabilidad real.
 - Firmar builds release con secrets y agregar distribución interna automatizada.

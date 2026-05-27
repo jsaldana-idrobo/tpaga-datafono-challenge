@@ -26,4 +26,19 @@ subprojects { subproject ->
             kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.ExperimentalStdlibApi"
         }
     }
+
+    if (subproject.name == "react-native-screens") {
+        subproject.plugins.withId("com.android.library") {
+            subproject.android {
+                packaging {
+                    jniLibs {
+                        pickFirsts += [
+                            "**/libfbjni.so",
+                            "**/libreactnative.so",
+                        ]
+                    }
+                }
+            }
+        }
+    }
 }

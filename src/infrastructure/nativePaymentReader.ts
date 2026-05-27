@@ -1,10 +1,11 @@
-import {NativeModules} from 'react-native';
+import {TurboModuleRegistry} from 'react-native';
 
 import type {
   PaymentErrorInfo,
   PaymentMethod,
   PaymentReceipt,
 } from '../domain/paymentTypes';
+import type {Spec as NativePaymentReaderModule} from '../specs/NativePaymentReaderModule';
 
 const PAYMENT_READER_TIMEOUT_MS = 10000;
 const PAYMENT_READER_TIMEOUT_CODE = 'PAYMENT_READER_TIMEOUT';
@@ -13,10 +14,6 @@ type NativePaymentResponse = {
   amount: number;
   status: string;
   transactionId: string;
-};
-
-type NativePaymentReaderModule = {
-  readPayment: (amount: number, method: PaymentMethod) => Promise<unknown>;
 };
 
 type ReadPaymentOptions = Readonly<{
@@ -29,11 +26,10 @@ const createPaymentReaderTimeoutError = (): Error & PaymentErrorInfo =>
   });
 
 const getPaymentReaderModule = (): NativePaymentReaderModule => {
-  const paymentReaderModule = NativeModules.PaymentReaderModule as
-    | NativePaymentReaderModule
-    | undefined;
+  const paymentReaderModule =
+    TurboModuleRegistry.get<NativePaymentReaderModule>('PaymentReaderModule');
 
-  if (paymentReaderModule === undefined) {
+  if (paymentReaderModule === null) {
     throw new Error('PaymentReaderModule no está registrado en Android.');
   }
 
