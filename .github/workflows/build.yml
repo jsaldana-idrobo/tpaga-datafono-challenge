@@ -43,7 +43,7 @@ jobs:
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
 
       - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;27.1.12297006"
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "cmake;3.22.1" "ndk;27.1.12297006"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -58,7 +58,7 @@ jobs:
         run: pnpm test:coverage --runInBand --ci
 
       - name: Android unit tests
-        run: pnpm android:test
+        run: cd android && ./gradlew :app:testDebugUnitTest --no-daemon --stacktrace --dependency-verification lenient
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
