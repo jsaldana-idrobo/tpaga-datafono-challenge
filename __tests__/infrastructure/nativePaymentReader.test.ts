@@ -11,6 +11,9 @@ const paymentReaderModule = NativeModules.PaymentReaderModule as {
     Promise<{status: string; transactionId: string; amount: number}>
   >;
 };
+const nativeModules = NativeModules as typeof NativeModules & {
+  PaymentReaderModule: typeof paymentReaderModule | undefined;
+};
 
 describe('native payment reader gateway', () => {
   afterEach(() => {
@@ -66,6 +69,19 @@ describe('native payment reader gateway', () => {
     await expect(readPayment(70000, 'NFC')).rejects.toThrow(
       INVALID_READER_RESPONSE_ERROR,
     );
+  });
+
+  it('fails fast when the native payment module is not registered', async () => {
+    const originalPaymentReaderModule = nativeModules.PaymentReaderModule;
+    nativeModules.PaymentReaderModule = undefined;
+
+    try {
+      await expect(readPayment(70000, 'QR')).rejects.toThrow(
+        'PaymentReaderModule no está registrado en Android.',
+      );
+    } finally {
+      nativeModules.PaymentReaderModule = originalPaymentReaderModule;
+    }
   });
 
   it('rejects when the native reader exceeds the timeout', async () => {

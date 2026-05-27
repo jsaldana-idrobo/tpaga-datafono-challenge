@@ -3,9 +3,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {enableScreens} from 'react-native-screens';
 
-import {AmountScreen} from '../presentation/screens/AmountScreen';
-import {ProcessingScreen} from '../presentation/screens/ProcessingScreen';
-import {ResultScreen} from '../presentation/screens/ResultScreen';
+import {AmountScreen} from '../presentation/screens/AmountScreen/AmountScreen';
+import {ProcessingScreen} from '../presentation/screens/ProcessingScreen/ProcessingScreen';
+import {ResultScreen} from '../presentation/screens/ResultScreen/ResultScreen';
 import {navigationColors, navigationStyles} from './PaymentNavigator.styles';
 import type {RootStackParamList} from './navigationTypes';
 

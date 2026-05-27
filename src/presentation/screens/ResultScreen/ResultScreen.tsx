@@ -2,12 +2,12 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React from 'react';
 import {Text, View} from 'react-native';
 
-import {formatCOP} from '../../domain/currency';
-import {PAYMENT_METHOD_LABELS} from '../../domain/paymentTypes';
-import type {RootStackParamList} from '../../navigation/navigationTypes';
-import {PrimaryButton} from '../components/PrimaryButton';
-import {ScreenShell} from '../components/ScreenShell';
-import {styles} from './ResultScreen.styles';
+import {formatCOP} from '../../../domain/currency';
+import {PAYMENT_METHOD_LABELS} from '../../../domain/paymentTypes';
+import type {RootStackParamList} from '../../../navigation/navigationTypes';
+import {PrimaryButton} from '../../components/PrimaryButton/PrimaryButton';
+import {ScreenShell} from '../../components/ScreenShell/ScreenShell';
+import {styles} from './styles';
 
 type ResultScreenProps = Readonly<
   NativeStackScreenProps<RootStackParamList, 'Result'>

@@ -17,7 +17,7 @@ export ANDROID_HOME=/opt/homebrew/share/android-commandlinetools
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 ```
 
-## Instalacion Y Ejecucion
+## Instalación y ejecución
 
 ```bash
 corepack enable
@@ -26,7 +26,7 @@ pnpm start
 pnpm android
 ```
 
-## Validacion
+## Validación
 
 ```bash
 pnpm typecheck
@@ -43,17 +43,40 @@ pnpm e2e:build:android
 pnpm e2e:android
 ```
 
-La configuracion Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene otro nombre, cambia `avdName` en `.detoxrc.js`.
+La configuración Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene otro nombre, cambia `avdName` en `.detoxrc.js`.
 
-## Decisiones Tecnicas
+## Decisiones técnicas
 
 - React Native bare + TypeScript estricto para poder integrar un Native Module real en `/android`.
 - React Navigation para mantener el flujo de 3 pantallas desacoplado y tipado.
-- Dominio separado para formato COP, validacion de montos, tipos de pago y normalizacion de errores.
+- Dominio separado para formato COP, validación de montos, tipos de pago y normalización de errores.
 - `PaymentReaderModule` expone `readPayment(amount, method)` como Promise hacia JS.
-- `QR` y `NFC` aprueban despues de 1.5s con `status`, `transactionId` y `amount`.
-- `CARD` esta en la UI porque lo pide el challenge, pero el lector nativo lo rechaza con error controlado para demostrar el flujo de error/reintento.
-- Se previenen dobles toques con un hook `useSingleFlight` y se evita actualizar navegacion si la pantalla de procesamiento se desmonta.
+- `QR` y `NFC` aprueban después de 1.5s con `status`, `transactionId` y `amount`.
+- `CARD` está en la UI porque lo pide el challenge, pero el lector nativo lo rechaza con error controlado para demostrar el flujo de error/reintento.
+- Se previenen dobles toques con un hook `useSingleFlight` y se evita actualizar navegación si la pantalla de procesamiento se desmonta.
+
+## Documentación
+
+### Arquitectura de carpetas
+
+- `src/domain`: reglas puras de negocio, validaciones, formato COP, tipos y normalización de errores.
+- `src/infrastructure`: gateway JS hacia el módulo nativo Android y protecciones de timeout/contrato.
+- `src/navigation`: stack tipado de React Navigation y estilos globales de navegación.
+- `src/presentation/screens`: pantallas agrupadas por feature con su `styles.ts`.
+- `src/presentation/components`: componentes reutilizables agrupados con su `styles.ts`.
+- `android/app/src/main/java`: implementación Kotlin del lector de pagos.
+
+### Flujo de pago
+
+1. `AmountScreen` valida y formatea el monto, permite elegir `QR`, `NFC` o `CARD`, y bloquea dobles envíos.
+2. `ProcessingScreen` ejecuta `readPayment` contra el módulo nativo, normaliza errores y evita updates después de desmontar.
+3. `ResultScreen` muestra aprobación o rechazo con opción de iniciar un nuevo cobro.
+
+### Calidad y CI
+
+- GitHub Actions ejecuta instalación reproducible con pnpm, typecheck, lint, Jest con coverage, unit tests Android y SonarCloud Quality Gate.
+- SonarCloud consume `coverage/lcov.info` y excluye archivos sin lógica ejecutable como estilos, mocks, tests, Android/iOS generated/build output y tipos de navegación.
+- El objetivo local de cobertura se valida con `pnpm test:coverage`.
 
 ## Testing
 
@@ -63,9 +86,10 @@ La configuracion Detox usa el AVD `Pixel_6_API_35`. Si el emulador local tiene o
 - Unit tests Android/Kotlin para reglas del lector nativo.
 - Specs E2E Detox para QR, NFC y Tarjeta.
 
-## Que Haria Con Mas Tiempo
+## Próximas mejoras
 
-- Agregar un contrato TurboModule/New Architecture para tipar el puente nativo end to end.
-- Persistir transacciones localmente y agregar historial.
-- Medir tiempos reales del flujo con trazas y logs estructurados.
-- Configurar CI con jobs separados para lint, typecheck, Jest, Gradle y Detox.
+- Agregar contrato TurboModule/New Architecture para tipar el puente nativo end to end.
+- Persistir transacciones localmente y agregar historial con filtros por método, estado y fecha.
+- Enviar trazas y errores a Sentry/Crashlytics sin PII para mejorar observabilidad real.
+- Firmar builds release con secrets y agregar distribución interna automatizada.
+- Ejecutar Detox en un job programado o manual para no encarecer cada pull request.

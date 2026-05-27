@@ -5,8 +5,8 @@ import {
   PAYMENT_METHOD_LABELS,
   PAYMENT_METHODS,
   type PaymentMethod,
-} from '../../domain/paymentTypes';
-import {styles} from './MethodSelector.styles';
+} from '../../../domain/paymentTypes';
+import {styles} from './styles';
 
 type MethodSelectorProps = Readonly<{
   onChange: (method: PaymentMethod) => void;

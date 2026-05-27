@@ -4,7 +4,7 @@ import React from 'react';
 import {NativeModules} from 'react-native';
 
 import type {RootStackParamList} from '../../src/navigation/navigationTypes';
-import {ProcessingScreen} from '../../src/presentation/screens/ProcessingScreen';
+import {ProcessingScreen} from '../../src/presentation/screens/ProcessingScreen/ProcessingScreen';
 
 const paymentReaderModule = NativeModules.PaymentReaderModule as {
   readPayment: jest.Mock<

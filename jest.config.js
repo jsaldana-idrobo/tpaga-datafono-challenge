@@ -5,6 +5,7 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/navigation/navigationTypes.ts',
     '!src/**/*.styles.ts',
+    '!src/**/styles.ts',
     '!src/**/*.d.ts',
   ],
   coverageDirectory: 'coverage',

@@ -2,7 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {styles} from './ScreenShell.styles';
+import {styles} from './styles';
 
 type ScreenShellProps = Readonly<{
   children: React.ReactNode;

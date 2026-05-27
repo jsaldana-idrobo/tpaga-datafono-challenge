@@ -2,12 +2,12 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect} from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 
-import {formatCOP} from '../../domain/currency';
-import {normalizePaymentError} from '../../domain/paymentErrors';
-import {readPayment} from '../../infrastructure/nativePaymentReader';
-import type {RootStackParamList} from '../../navigation/navigationTypes';
-import {ScreenShell} from '../components/ScreenShell';
-import {activityIndicatorColors, styles} from './ProcessingScreen.styles';
+import {formatCOP} from '../../../domain/currency';
+import {normalizePaymentError} from '../../../domain/paymentErrors';
+import {readPayment} from '../../../infrastructure/nativePaymentReader';
+import type {RootStackParamList} from '../../../navigation/navigationTypes';
+import {ScreenShell} from '../../components/ScreenShell/ScreenShell';
+import {activityIndicatorColors, styles} from './styles';
 
 type ProcessingScreenProps = NativeStackScreenProps<
   RootStackParamList,

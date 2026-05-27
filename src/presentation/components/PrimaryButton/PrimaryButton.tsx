@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, Text} from 'react-native';
 
-import {styles} from './PrimaryButton.styles';
+import {styles} from './styles';
 
 type PrimaryButtonProps = Readonly<{
   disabled?: boolean;

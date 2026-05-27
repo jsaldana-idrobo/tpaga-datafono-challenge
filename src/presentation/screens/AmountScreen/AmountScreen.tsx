@@ -9,19 +9,25 @@ import {
   View,
 } from 'react-native';
 
-import {formatCOP, parseCOPInput} from '../../domain/currency';
-import type {PaymentMethod} from '../../domain/paymentTypes';
-import {validatePaymentAmount} from '../../domain/paymentValidation';
-import type {RootStackParamList} from '../../navigation/navigationTypes';
-import {MethodSelector} from '../components/MethodSelector';
-import {PrimaryButton} from '../components/PrimaryButton';
-import {ScreenShell} from '../components/ScreenShell';
-import {useSingleFlight} from '../hooks/useSingleFlight';
-import {styles, textInputColors} from './AmountScreen.styles';
+import {formatCOP, parseCOPInput} from '../../../domain/currency';
+import type {PaymentMethod} from '../../../domain/paymentTypes';
+import {validatePaymentAmount} from '../../../domain/paymentValidation';
+import type {RootStackParamList} from '../../../navigation/navigationTypes';
+import {MethodSelector} from '../../components/MethodSelector/MethodSelector';
+import {PrimaryButton} from '../../components/PrimaryButton/PrimaryButton';
+import {ScreenShell} from '../../components/ScreenShell/ScreenShell';
+import {useSingleFlight} from '../../hooks/useSingleFlight';
+import {styles, textInputColors} from './styles';
 
 type AmountScreenProps = Readonly<
   NativeStackScreenProps<RootStackParamList, 'Amount'>
 >;
+
+const keyboardAvoidingBehavior = Platform.select<
+  'height' | 'position' | 'padding' | undefined
+>({
+  ios: 'padding',
+});
 
 export function AmountScreen({
   navigation,
@@ -60,7 +66,7 @@ export function AmountScreen({
   return (
     <ScreenShell>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={keyboardAvoidingBehavior}
         style={styles.keyboardAvoidingView}>
         <View>
           <Text style={styles.eyebrow}>Datáfono digital</Text>
