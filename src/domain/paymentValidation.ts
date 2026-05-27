@@ -26,7 +26,9 @@ export const validatePaymentAmount = (
   if (amount > MAX_PAYMENT_AMOUNT_COP) {
     return {
       isValid: false,
-      message: `El monto máximo por cobro es ${formatCOP(MAX_PAYMENT_AMOUNT_COP)}.`,
+      message: `El monto máximo por cobro es ${formatCOP(
+        MAX_PAYMENT_AMOUNT_COP,
+      )}.`,
     };
   }
 

@@ -1,7 +1,7 @@
 module.exports = {
   testRunner: {
     args: {
-      '$0': 'jest',
+      $0: 'jest',
       config: 'e2e/jest.config.js',
     },
     jest: {

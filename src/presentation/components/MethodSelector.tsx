@@ -28,9 +28,16 @@ export function MethodSelector({
             accessibilityState={{checked: isSelected}}
             key={method}
             onPress={() => onChange(method)}
-            style={[styles.option, isSelected ? styles.optionSelected : undefined]}
+            style={[
+              styles.option,
+              isSelected ? styles.optionSelected : undefined,
+            ]}
             testID={`method-${method}`}>
-            <Text style={[styles.label, isSelected ? styles.labelSelected : undefined]}>
+            <Text
+              style={[
+                styles.label,
+                isSelected ? styles.labelSelected : undefined,
+              ]}>
               {PAYMENT_METHOD_LABELS[method]}
             </Text>
           </Pressable>

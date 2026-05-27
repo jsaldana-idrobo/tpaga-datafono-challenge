@@ -8,7 +8,9 @@ const AMOUNT_INPUT_TEST_ID = 'amount-input';
 const SUBMIT_PAYMENT_BUTTON_TEST_ID = 'submit-payment-button';
 
 const paymentReaderModule = NativeModules.PaymentReaderModule as {
-  readPayment: jest.Mock<Promise<{status: string; transactionId: string; amount: number}>>;
+  readPayment: jest.Mock<
+    Promise<{status: string; transactionId: string; amount: number}>
+  >;
 };
 
 describe('payment flow', () => {

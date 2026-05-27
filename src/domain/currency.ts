@@ -6,7 +6,8 @@ export const parseCOPInput = (value: string): number => {
 };
 
 export const formatCOP = (amount: number): string => {
-  const safeAmount = Number.isFinite(amount) && amount > 0 ? Math.trunc(amount) : 0;
+  const safeAmount =
+    Number.isFinite(amount) && amount > 0 ? Math.trunc(amount) : 0;
   const amountText = String(safeAmount).replace(
     /\B(?=(\d{3})+(?!\d))/g,
     COP_GROUP_SEPARATOR,

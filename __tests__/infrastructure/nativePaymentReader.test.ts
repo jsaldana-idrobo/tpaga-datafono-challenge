@@ -3,7 +3,9 @@ import {NativeModules} from 'react-native';
 import {readPayment} from '../../src/infrastructure/nativePaymentReader';
 
 const paymentReaderModule = NativeModules.PaymentReaderModule as {
-  readPayment: jest.Mock<Promise<{status: string; transactionId: string; amount: number}>>;
+  readPayment: jest.Mock<
+    Promise<{status: string; transactionId: string; amount: number}>
+  >;
 };
 
 describe('native payment reader gateway', () => {

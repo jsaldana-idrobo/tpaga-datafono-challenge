@@ -1,0 +1,6 @@
+node_modules
+android/**/build
+ios/Pods
+ios/**/*.xcassets
+coverage
+.git
